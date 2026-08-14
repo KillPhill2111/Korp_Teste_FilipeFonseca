@@ -1,16 +1,19 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-cadastro-produto',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule], // Importações obrigatórias
-  templateUrl: './cadastro-produto.html',        // Nome ajustado para sua estrutura
-  styleUrl: './cadastro-produto.css'             // Nome ajustado para sua estrutura
+  imports: [CommonModule, ReactiveFormsModule], 
+  templateUrl: './cadastro-produto.html',        
+  styleUrl: './cadastro-produto.css'             
 })
 export class CadastroProduto {
   private fb = inject(FormBuilder);
+  private http=inject(HttpClient);
+
   public produtoForm: FormGroup;
 
   constructor() {
@@ -23,9 +26,23 @@ export class CadastroProduto {
 
   salvarProduto() {
     if (this.produtoForm.valid) {
-      console.log('Dados do produto:', this.produtoForm.value);
-      alert('Produto validado com sucesso no front!');
-      this.produtoForm.reset({ saldo: 0 });
+      const dadosProduto=this.produtoForm.value
+
+      this.http.post('http://localhost:5100/api/produtos', dadosProduto)
+        .subscribe({
+          next:(resposta)=>{
+            console.log('Salvo no sqlLite com sucesso',resposta)
+            alert('Produto cadastrado e persistido com sucesso no banco de dados')
+            this.produtoForm.reset({saldo:0})
+          },
+          error:(err)=>{
+            console.error('Erro ao tentar salvar',err)
+            alert('Falha ao tentar conectar com o microsserviço de estoque. Verifique se o CSharp esta rodando...')
+          
+          }
+        })
+
+     
     }
   }
 }
