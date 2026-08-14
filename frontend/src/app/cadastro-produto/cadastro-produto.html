@@ -1,0 +1,39 @@
+<div class="container-cadastro" style="padding: 20px; max-width: 400px;">
+  <h2>📦 Cadastro de Produto</h2>
+  
+  <form [formGroup]="produtoForm" (ngSubmit)="salvarProduto()">
+    
+    
+    <div style="margin-bottom: 15px;">
+      <label style="display: block;">Código do Produto:</label>
+      <input type="text" formControlName="codigo" style="width: 100%; padding: 8px;">
+      <small *ngIf="produtoForm.get('codigo')?.touched && produtoForm.get('codigo')?.errors?.['required']" style="color: red;">
+        O código é obrigatório.
+      </small>
+    </div>
+
+    
+    <div style="margin-bottom: 15px;">
+      <label style="display: block;">Descrição (Nome):</label>
+      <input type="text" formControlName="descricao" style="width: 100%; padding: 8px;">
+      <small *ngIf="produtoForm.get('descricao')?.touched && produtoForm.get('descricao')?.errors?.['required']" style="color: red;">
+        A descrição é obrigatória.
+      </small>
+    </div>
+
+    
+    <div style="margin-bottom: 15px;">
+      <label style="display: block;">Saldo em Estoque:</label>
+      <input type="number" formControlName="saldo" style="width: 100%; padding: 8px;">
+      <small *ngIf="produtoForm.get('saldo')?.touched && produtoForm.get('saldo')?.errors?.['min']" style="color: red;">
+        O estoque não pode ser negativo.
+      </small>
+    </div>
+
+    
+    <button type="submit" [disabled]="produtoForm.invalid" style="padding: 10px 20px; cursor: pointer;">
+      Salvar Produto
+    </button>
+
+  </form>
+</div>

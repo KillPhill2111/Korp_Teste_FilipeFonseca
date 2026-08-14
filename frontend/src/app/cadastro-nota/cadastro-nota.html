@@ -1,0 +1,71 @@
+<div class="container-nota">
+  <h2> Cadastro de Nota Fiscal</h2>
+
+  <form [formGroup]="notaForm" (ngSubmit)="salvarNota()">
+    
+    
+    <div class="nota-header">
+      <div class="form-group-metade">
+        <label>Numeração Sequencial</label>
+        <input type="text" formControlName="numeracao" class="input-disabled">
+      </div>
+      <div class="form-group-metade">
+        <label>Status Inicial</label>
+        <input type="text" formControlName="status" class="input-disabled status-aberta">
+      </div>
+    </div>
+
+    <hr class="divisor-interno">
+
+    
+    <h3> Produtos da Nota</h3>
+    
+    <div formArrayName="produtos">
+      <div *ngFor="let item of listaProdutos.controls; let i = index" [formGroupName]="i" class="produto-linha">
+        
+        
+        <div class="campo-selecao">
+          <label>Produto</label>
+          <select formControlName="codigo">
+            <option value="" disabled selected>Selecione um produto...</option>
+            <option *ngFor="let prod of produtosDisponiveis" [value]="prod.codigo">
+              {{ prod.descricao }} (Estoque: {{ prod.saldo }})
+            </option>
+          </select>
+          <small class="error-message" *ngIf="item.get('codigo')?.touched && item.get('codigo')?.errors?.['required']">
+            Obrigatório.
+          </small>
+        </div>
+
+        
+        <div class="campo-quantidade">
+          <label>Qtd</label>
+          <input type="number" formControlName="quantidade">
+          <small class="error-message" *ngIf="item.get('quantidade')?.touched && item.get('quantidade')?.errors?.['min']">
+            Mínimo 1.
+          </small>
+        </div>
+
+        
+        <div class="campo-remover">
+          <label>&nbsp;</label>
+          <button type="button" class="btn-remover" (click)="removerProduto(i)" [disabled]="listaProdutos.length === 1">
+            🗑️
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    
+    <button type="button" class="btn-adicionar" (click)="adicionarProduto()">
+      ➕ Adicionar Outro Produto
+    </button>
+
+    
+    <button type="submit" class="btn-salvar" [disabled]="notaForm.invalid || listaProdutos.length === 0">
+      Salvar Nota Fiscal
+    </button>
+
+  </form>
+</div>

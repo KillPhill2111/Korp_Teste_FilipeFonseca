@@ -1,0 +1,90 @@
+.container-cadastro {
+  max-width: 450px;
+  margin: 60px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+
+.container-cadastro h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  color: #1a1a1a;
+  font-size: 24px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #4a4a4a;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #333333;
+  box-sizing: border-box;
+  transition: all 0.2s ease-in-out;
+}
+
+
+.form-group input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+
+.error-message {
+  display: block;
+  margin-top: 6px;
+  color: #dc3545;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+/* Botão de Enviar */
+.btn-enviar {
+  width: 100%;
+  padding: 14px;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 10px;
+}
+
+
+.btn-enviar:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+
+.btn-enviar:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
