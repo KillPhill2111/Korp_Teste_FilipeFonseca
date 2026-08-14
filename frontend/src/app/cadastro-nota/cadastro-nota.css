@@ -119,3 +119,87 @@
 .btn-salvar:disabled { background-color: #cccccc; cursor: not-allowed; }
 
 .error-message { color: #dc3545; font-size: 11px; display: block; margin-top: 4px; }
+
+/* Estilos da Tabela de Notas */
+.tabela-container {
+  margin-top: 15px;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tabela-notas {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.tabela-notas th {
+  background-color: #f8f9fa;
+  padding: 12px;
+  color: #495057;
+  font-weight: 600;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.tabela-notas td {
+  padding: 12px;
+  border-bottom: 1px solid #dee2e6;
+  vertical-align: middle;
+}
+
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-aberta {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.badge-fechada {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+
+.btn-imprimir {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+
+.btn-imprimir:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.btn-imprimir:disabled {
+  background-color: #e9ecef;
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
+
+.spinner {
+  animation: piscar 1s infinite alternate;
+  font-weight: bold;
+}
+
+@keyframes piscar {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
