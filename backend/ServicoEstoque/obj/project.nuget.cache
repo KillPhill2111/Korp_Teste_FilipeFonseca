@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "wHeVktFrcg4=",
+  "dgSpecHash": "YJxDEVphkgY=",
   "success": true,
-  "projectFilePath": "D:\\Dados\\Filipe\\Projetos de desenvolvimento e programação\\Korp_Teste_FilipeFonseca\\Korp_Teste_FilipeFonseca\\backend\\servicoEstoque\\ServicoEstoque.csproj",
+  "projectFilePath": "D:\\Dados\\Filipe\\Projetos de desenvolvimento e programação\\Korp_Teste_FilipeFonseca\\Korp_Teste_FilipeFonseca\\backend\\ServicoEstoque\\ServicoEstoque.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Pichau\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\Pichau\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.8\\microsoft.aspnetcore.openapi.10.0.8.nupkg.sha512",
@@ -42,10 +42,10 @@
     {
       "code": "NU1903",
       "level": "Warning",
-      "message": "O pacote 'Microsoft.OpenApi' 2.0.0 tem uma alta vulnerabilidade de gravidade conhecida, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
-      "projectPath": "D:\\Dados\\Filipe\\Projetos de desenvolvimento e programação\\Korp_Teste_FilipeFonseca\\Korp_Teste_FilipeFonseca\\backend\\servicoEstoque\\ServicoEstoque.csproj",
+      "message": "Package 'Microsoft.OpenApi' 2.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "projectPath": "D:\\Dados\\Filipe\\Projetos de desenvolvimento e programação\\Korp_Teste_FilipeFonseca\\Korp_Teste_FilipeFonseca\\backend\\ServicoEstoque\\ServicoEstoque.csproj",
       "warningLevel": 1,
-      "filePath": "D:\\Dados\\Filipe\\Projetos de desenvolvimento e programação\\Korp_Teste_FilipeFonseca\\Korp_Teste_FilipeFonseca\\backend\\servicoEstoque\\ServicoEstoque.csproj",
+      "filePath": "D:\\Dados\\Filipe\\Projetos de desenvolvimento e programação\\Korp_Teste_FilipeFonseca\\Korp_Teste_FilipeFonseca\\backend\\ServicoEstoque\\ServicoEstoque.csproj",
       "libraryId": "Microsoft.OpenApi",
       "targetGraphs": [
         "net10.0"

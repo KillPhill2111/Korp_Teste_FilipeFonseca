@@ -2466,11 +2466,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Dados\\Filipe\\Projetos de desenvolvimento e programação\\Korp_Teste_FilipeFonseca\\Korp_Teste_FilipeFonseca\\backend\\servicoEstoque\\ServicoEstoque.csproj",
+      "projectUniqueName": "D:\\Dados\\Filipe\\Projetos de desenvolvimento e programação\\Korp_Teste_FilipeFonseca\\Korp_Teste_FilipeFonseca\\backend\\ServicoEstoque\\ServicoEstoque.csproj",
       "projectName": "ServicoEstoque",
-      "projectPath": "D:\\Dados\\Filipe\\Projetos de desenvolvimento e programação\\Korp_Teste_FilipeFonseca\\Korp_Teste_FilipeFonseca\\backend\\servicoEstoque\\ServicoEstoque.csproj",
+      "projectPath": "D:\\Dados\\Filipe\\Projetos de desenvolvimento e programação\\Korp_Teste_FilipeFonseca\\Korp_Teste_FilipeFonseca\\backend\\ServicoEstoque\\ServicoEstoque.csproj",
       "packagesPath": "C:\\Users\\Pichau\\.nuget\\packages\\",
-      "outputPath": "D:\\Dados\\Filipe\\Projetos de desenvolvimento e programação\\Korp_Teste_FilipeFonseca\\Korp_Teste_FilipeFonseca\\backend\\servicoEstoque\\obj\\",
+      "outputPath": "D:\\Dados\\Filipe\\Projetos de desenvolvimento e programação\\Korp_Teste_FilipeFonseca\\Korp_Teste_FilipeFonseca\\backend\\ServicoEstoque\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -2969,7 +2969,7 @@
       "code": "NU1903",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "O pacote 'Microsoft.OpenApi' 2.0.0 tem uma alta vulnerabilidade de gravidade conhecida, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
+      "message": "Package 'Microsoft.OpenApi' 2.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-v5pm-xwqc-g5wc",
       "libraryId": "Microsoft.OpenApi",
       "targetGraphs": [
         "net10.0"
