@@ -13,37 +13,53 @@
         <input type="text" formControlName="status" class="input-disabled status-aberta">
       </div>
     </div>
+
     <hr class="divisor-interno">
-    <h3>📦 Produtos da Nota</h3>
+
+    <h3> Produtos da Nota</h3>
+    
     <div formArrayName="produtos">
       <div *ngFor="let item of listaProdutos.controls; let i = index" [formGroupName]="i" class="produto-linha">
+        
         <div class="campo-selecao">
           <label>Produto</label>
-          <select formControlName="codigo">
-            <option value="" disabled selected>Selecione um produto...</option>
+          <!-- formControlName mapeado para bater com o objeto C# -->
+          <select formControlName="codigoProduto">
+            <option value="" disabled selected>Selecione um produto real do estoque...</option>
             <option *ngFor="let prod of produtosDisponiveis" [value]="prod.codigo">
-              {{ prod.descricao }} (Estoque: {{ prod.saldo }})
+              {{ prod.descricao }} (Código: {{ prod.codigo }} | Saldo Atual: {{ prod.saldo }})
             </option>
           </select>
         </div>
+
         <div class="campo-quantidade">
           <label>Qtd</label>
           <input type="number" formControlName="quantidade">
         </div>
+
         <div class="campo-remover">
           <label>&nbsp;</label>
-          <button type="button" class="btn-remover" (click)="removerProduto(i)" [disabled]="listaProdutos.length === 1">🗑️</button>
+          <button type="button" class="btn-remover" (click)="removerProduto(i)" [disabled]="listaProdutos.length === 1">
+            🗑️
+          </button>
         </div>
+
       </div>
     </div>
-    <button type="button" class="btn-adicionar" (click)="adicionarProduto()">➕ Adicionar Outro Produto</button>
-    <button type="submit" class="btn-salvar" [disabled]="notaForm.invalid || listaProdutos.length === 0">Salvar Nota Fiscal</button>
+
+    <button type="button" class="btn-adicionar" (click)="adicionarProduto()">
+      ➕ Adicionar Outro Produto
+    </button>
+
+    <button type="submit" class="btn-salvar" [disabled]="notaForm.invalid || listaProdutos.length === 0">
+      Salvar Nota Fiscal
+    </button>
+
   </form>
 
   <hr class="divisor-interno">
 
-  
-  <h3>📋 Notas Fiscais Emitidas</h3>
+  <h3> Notas Fiscais Emitidas (Faturamento)</h3>
   <div class="tabela-container">
     <table class="tabela-notas">
       <thead>
@@ -62,13 +78,11 @@
             </span>
           </td>
           <td>
-            
             <button 
               class="btn-imprimir" 
               (click)="imprimirNota(nota)" 
               [disabled]="nota.status !== 'Aberta' || processandoImpressao">
               
-            
               <span *ngIf="processandoImpressao && notaSendoProcessada === nota.numeracao" class="spinner">⏳ Processando...</span>
               <span *ngIf="!(processandoImpressao && notaSendoProcessada === nota.numeracao)">🖨️ Imprimir</span>
               

@@ -1,6 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule,Validators } from '@angular/forms'
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-cadastro-nota',
@@ -11,40 +12,60 @@ import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule,Validators } fro
 })
 export class CadastroNota {
   private fb = inject(FormBuilder);
-  public notaForm: FormGroup;
+  private http=inject(HttpClient);
+  // public notaForm: FormGroup;
 
+  public notaForm:FormGroup;
   public processandoImpressao:boolean=false;
   public notaSendoProcessada:string | null=null;
   
-  
-  public produtosDisponiveis = [
-    { codigo: 'PROD-001', descricao: 'Arroz Integral 1kg', saldo: 10 },
-    { codigo: 'PROD-002', descricao: 'Feijão Carioca 1kg', saldo: 15 },
-    { codigo: 'PROD-003', descricao: 'Óleo de Soja 900ml', saldo: 5 }
-  ];
+  public produtosDisponiveis:any[]=[];
+  public notasFiscaisCriadas:any[]=[];
+  // public produtosDisponiveis = [
+  //   { codigo: 'PROD-001', descricao: 'Arroz Integral 1kg', saldo: 10 },
+  //   { codigo: 'PROD-002', descricao: 'Feijão Carioca 1kg', saldo: 15 },
+  //   { codigo: 'PROD-003', descricao: 'Óleo de Soja 900ml', saldo: 5 }
+  // ];
 
-  public notasFiscaisCriadas=[
-    {numeracao:'NF-5432', status:'Aberta',itens:[{codigo:'PROD-001',quantidade:2}]},
-    {numeracao:'NF-8812', status:'Fechada',itens:[{codigo:'PROD-002',quantidade:1}]}
-  ]
+  // public notasFiscaisCriadas=[
+  //   {numeracao:'NF-5432', status:'Aberta',itens:[{codigo:'PROD-001',quantidade:2}]},
+  //   {numeracao:'NF-8812', status:'Fechada',itens:[{codigo:'PROD-002',quantidade:1}]}
+  // ]
 
   constructor() {
     this.notaForm = this.fb.group({
       
-      numeracao: [{ value: 'NF-' + Math.floor(1000 + Math.random() * 9000), disabled: true }],
+      numeracao: [{value:'Gerado automaticamente',disabled:true}],
       status: [{ value: 'Aberta', disabled: true }],
       produtos: this.fb.array([]) 
     }); 
     this.adicionarProduto();
   }
 
+  ngOnInit(){
+    this.carregarProdutosEstoque();
+    this.carregarNotasDoFaturamento();
+    this.adicionarProduto();
+  }
+  carregarProdutosEstoque(){
+    this.http.get<any[]>('http://localhost:5100/api/produtos').subscribe({
+      next:(dados)=>this.produtosDisponiveis=dados,
+      error:(erro)=>console.error('Erro ao buscar produtos: ', erro)
+    });
+  }
+  carregarNotasDoFaturamento(){
+    this.http.get<any[]>('http://localhost:5200/api/notas').subscribe({
+      next: (dados) => this.notasFiscaisCriadas = dados,
+      error: (erro) => console.error('Erro ao buscar notas:', erro)
+    });
+  }
   get listaProdutos(): FormArray {
     return this.notaForm.get('produtos') as FormArray;
   }
   
   adicionarProduto() {
     const produtoGrupo = this.fb.group({
-      codigo: ['', [Validators.required]],
+      codigoProduto: ['', [Validators.required]], 
       quantidade: [1, [Validators.required, Validators.min(1)]]
     });
     this.listaProdutos.push(produtoGrupo);
@@ -57,54 +78,59 @@ export class CadastroNota {
   }
 
   salvarNota() {
-    if (this.notaForm.valid) {
-      const dadosNota = this.notaForm.getRawValue();
+     if (this.notaForm.valid) {
+      const novaNotaPayload = {
+        itens: this.listaProdutos.value 
+      };
 
-      const novosItens=this.listaProdutos.value
-
-      this.notasFiscaisCriadas.unshift({
-        numeracao:dadosNota.numeracao,
-        status:dadosNota.status,
-        itens:novosItens
+      this.http.post('http://localhost:5200/api/notas', novaNotaPayload).subscribe({
+        next: () => {
+          alert('Nota Fiscal criada com sucesso no banco de faturamento!');
+          this.listaProdutos.clear();
+          this.adicionarProduto();
+          this.carregarNotasDoFaturamento(); 
+        },
+        error: (erro) => {
+          console.error(erro);
+          alert('Erro ao salvar a Nota Fiscal.');
+        }
       });
-
-
-      alert(`Nota ${dadosNota.numeracao} criada com sucesso`)
-
-      // console.log('Nota Fiscal pronta para enviar ao CSharp:', dadosNota);
-      // alert(`Nota ${dadosNota.numeracao} criada com sucesso com status Aberta!`);
-      
-      this.listaProdutos.clear();
-      this.notaForm.patchValue({
-        numeracao: 'NF-' + Math.floor(1000 + Math.random() * 9000),
-        status: 'Aberta'
-      });
-      this.adicionarProduto();
     }
   }
 
   imprimirNota(nota:any){
-    if(nota.status!=='Aberta'){
-      alert(`Erro: Não é permitido imprimir notas com status diferente de "Aberta"`)
-      return
+    if (nota.status !== 'Aberta') {
+      alert('Erro: Apenas notas com status Aberta podem ser impressas.');
+      return;
     }
-    this.processandoImpressao=true;
-    this.notaSendoProcessada=nota.numeracao;
-    setTimeout(()=>{
-      nota.status='Fechada';
 
-      nota.itens.forEach((itemDaNota:any)=>{
-        const produtoNoEstoque=this.produtosDisponiveis.find(p=>p.codigo===itemDaNota.codigo)
-        if (produtoNoEstoque){
-          produtoNoEstoque.saldo-=itemDaNota.quantidade
+    this.processandoImpressao = true;
+    this.notaSendoProcessada = nota.numeracao;
+
+    
+    this.http.put(`http://localhost:5200/api/notas/${nota.id}/imprimir`, {}).subscribe({
+      next: () => {
+        alert(`Nota ${nota.numeracao} impressa e FECHADA com sucesso!`);
+        this.processandoImpressao = false;
+        this.notaSendoProcessada = null;
+        
+        
+        this.carregarProdutosEstoque();
+        this.carregarNotasDoFaturamento();
+      },
+      error: (respostaErro) => {
+        this.processandoImpressao = false;
+        this.notaSendoProcessada = null;
+        
+        
+        if (respostaErro.status === 503) {
+          alert(` ATENÇÃO: Falha na operação!\n\nO Serviço de Estoque esta fora do ar ou indsponível no momento.\nA Nota Fiscal continuará em aberto e nenhum dado foi alterado.`);
+        } else {
+          alert('Ocorreu um erro inesperado ao tentar processar a nota.');
         }
-      });
-
-      this.processandoImpressao=false;
-      this.notaSendoProcessada=null
-
-      alert(`Nota ${nota.numeracao} processada, impressa e FECHADA com sucesso :D`)
-
-    },2000)
+        
+        this.carregarNotasDoFaturamento(); 
+      }
+    });
   }
 }
