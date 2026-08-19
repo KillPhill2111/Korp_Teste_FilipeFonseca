@@ -45,4 +45,29 @@ export class CadastroProduto {
      
     }
   }
+  sugerirCodigoComIA() {
+  const descricaoAtual = this.produtoForm.get('descricao')?.value;
+
+    if (!descricaoAtual || descricaoAtual.length < 3) {
+      alert('⚠️ Digite uma descrição detalhada primeiro para a IA analisar!');
+      return;
+    }
+
+  
+    console.log('IA analisando descrição para gerar SKU preditivo...');
+
+    this.http.post<{ codigoSugerido: string }>('http://localhost:5100/api/produtos/ia-sugerir-codigo', {
+      descricao: descricaoAtual
+    }).subscribe({
+      next: (resposta) => {
+        // Preenche o campo de código automaticamente com a sugestão da IA!
+        this.produtoForm.patchValue({ codigo: resposta.codigoSugerido });
+        alert(`🤖 IA Korp sugeriu o código SKU: ${resposta.codigoSugerido}`);
+      },
+      error: (erro) => {
+        console.error('Erro na IA:', erro);
+        alert('Falha ao processar Inteligência Artificial.');
+      }
+    });
+  }
 }
