@@ -155,4 +155,4 @@ Para fins de avaliação e defesa técnica do projeto, abaixo estão discriminad
     Foi desenvolvido um microsserviço de IA preditiva integrado nativamente ao backend de Estoque. Ele utiliza um algoritmo analítico baseado em regras de Processamento de Linguagem Natural (NLP) e taxonomia de ERP. Ao receber a descrição em texto livre do produto enviada pelo Angular, a IA quebra os tokens semanticamente, identifica a categoria do produto (Alimentos, Vestuário, Eletrônicos) e formula de maneira automatizada um código SKU padronizado estruturado, injetando o valor diretamente no campo do formulário do frontend.
     
 *   **Letra C - Implementação de Idempotência:**
-    Garantida em duas camadas. No frontend, o indicador de processamento bloqueia
+    Garantida em duas camadas. No frontend, o indicador de processamento bloqueia e desabilita o botão ao primeiro clique, impedindo envios duplicados por ansiedade do usuário. No backend, a API de Faturamento valida o estado do recurso antes de processar: caso a nota já possua um status diferente de `Aberta`, a requisição é imediatamente rejeitada sem causar efeitos colaterais ou duplicidade de baixa no estoque.
