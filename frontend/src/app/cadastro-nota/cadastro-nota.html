@@ -1,6 +1,6 @@
 <div class="container-nota">
   <h2>🧾 Cadastro de Nota Fiscal</h2>
-
+  
   <form [formGroup]="notaForm" (ngSubmit)="salvarNota()">
     
     <div class="nota-header">
@@ -17,7 +17,9 @@
     <hr class="divisor-interno">
 
     <h3> Produtos da Nota</h3>
-    
+    <button type="button" (click)="carregarProdutosDoEstoque()" style="background-color: #f1f3f5; color: #495057; border: 1px solid #ced4da; padding: 6px 12px; border-radius: 6px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 13px; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#e2e6ea'" onmouseout="this.style.backgroundColor='#f1f3f5'">
+      🔄 Atualizar Estoque
+    </button>
     <div formArrayName="produtos">
       <div *ngFor="let item of listaProdutos.controls; let i = index" [formGroupName]="i" class="produto-linha">
         

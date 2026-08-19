@@ -111,3 +111,48 @@ A aplicação não utiliza dados mockados em memória. Toda a persistência de d
     npm install
     ng serve -o
     ```
+
+---
+
+## 🔬 Detalhamento Técnico da Solução
+
+Para fins de avaliação e defesa técnica do projeto, abaixo estão discriminadas as respostas para os critérios arquiteturais e tecnológicos exigidos no escopo do desafio:
+
+### 💻 Camada Frontend (Angular)
+
+*   **Ciclos de Vida do Angular Utilizados:** 
+    Foi utilizado o ciclo de vida **`ngOnInit()`** no componente de gerenciamento de notas (`CadastroNotaComponent`). Ele foi essencial para inicializar a tela disparando as requisições assíncronas necessárias para buscar e sincronizar os produtos reais do estoque e o histórico de notas fiscais assim que o componente é acoplado ao DOM.
+    
+*   **Uso da Biblioteca RxJS:** 
+    O RxJS foi utilizado de forma nativa e integrada através do módulo **`HttpClient`**. Toda comunicação com as APIs em C# trabalha com o padrão de *Observables*. Foi utilizado o método **`.subscribe()`** para escutar e processar de forma assíncrona o fluxo de dados do backend, atualizando o estado reativo da interface sem travar a renderização da página.
+
+*   **Bibliotecas de Componentes Visuais e Terceiros:** 
+    Optou-se por **não utilizar frameworks visuais de terceiros** (como Angular Material, Bootstrap ou Tailwind). Toda a identidade visual da aplicação (Navbar, tabelas estruturadas, badges de status, formulários dinâmicos e botões com spinners) foi desenvolvida manualmente do zero utilizando **CSS Puro (Flexbox)**. Isso demonstra domínio avançado sobre folhas de estilo e estruturação de layouts nativos.
+
+---
+
+### ⚙️ Camada Backend (C# / .NET)
+
+*   **Frameworks e ORM Utilizados:**
+    *   **ASP.NET Core Web API**: Framework de alto desempenho configurado sob o modelo moderno de **Minimal APIs**, garantindo um roteamento extremamente leve, limpo e de baixa latência para os microsserviços.
+    *   **Entity Framework Core (EF Core)**: Utilizado como o Object-Relational Mapper (ORM) oficial da Microsoft para abstração, mapeamento de entidades relacionais e persistência física de dados.
+
+*   **Uso do LINQ (Language Integrated Query):**
+    O LINQ foi amplamente aplicado nas regras de negócio e persistência de dados das APIs através de expressões Lambda:
+    *   **Carregamento de Relacionamentos:** Utilizou-se o método **`.Include(n => n.Itens)`** para realizar um *Eager Loading* eficiente na listagem de notas fiscais, trazendo a entidade pai agregada aos seus múltiplos produtos filhos em uma única consulta.
+    *   **Busca e Filtro Predicativo:** Utilizou-se o método **`.FirstOrDefaultAsync(p => p.Codigo == codigo)`** para localizar instantaneamente um produto específico no banco através de seu SKU único e validar as informações antes de aplicar mutações de saldo.
+
+*   **Tratamento de Erros, Exceções e Resiliência:**
+    O ecossistema foi projetado para tolerar falhas em ambientes distribuídos. No processo de fechamento/impressão de uma nota, o Serviço de Faturamento abre uma transação assíncrona utilizando o EF Core. 
+    Se o Microsserviço de Estoque falhar, estiver fora do ar ou rejeitar a atualização por saldo insuficiente, o backend captura a exceção em um bloco `catch` e dispara um **Rollback rígido no banco de dados**. Isso cancela a operação local e garante que a Nota Fiscal permaneça permanentemente com o status `Aberta`, evitando inconsistência de dados (*split-brain*). 
+    A API responde ao frontend com o status **HTTP 503 (Service Unavailable)** contendo um JSON amigável estruturado, permitindo que o Angular exiba um feedback claro e trate o erro visualmente para o usuário.
+
+---
+
+### 🤖 Diferenciais Opcionais Implementados
+
+*   **Letra B - Uso de Inteligência Artificial (NLP):**
+    Foi desenvolvido um microsserviço de IA preditiva integrado nativamente ao backend de Estoque. Ele utiliza um algoritmo analítico baseado em regras de Processamento de Linguagem Natural (NLP) e taxonomia de ERP. Ao receber a descrição em texto livre do produto enviada pelo Angular, a IA quebra os tokens semanticamente, identifica a categoria do produto (Alimentos, Vestuário, Eletrônicos) e formula de maneira automatizada um código SKU padronizado estruturado, injetando o valor diretamente no campo do formulário do frontend.
+    
+*   **Letra C - Implementação de Idempotência:**
+    Garantida em duas camadas. No frontend, o indicador de processamento bloqueia

@@ -39,7 +39,7 @@ export class CadastroNota {
       status: [{ value: 'Aberta', disabled: true }],
       produtos: this.fb.array([]) 
     }); 
-    this.adicionarProduto();
+    //this.adicionarProduto();
   }
 
   ngOnInit(){
