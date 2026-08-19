@@ -23,9 +23,10 @@
         
         <div class="campo-selecao">
           <label>Produto</label>
-          <!-- formControlName mapeado para bater com o objeto C# -->
+          
           <select formControlName="codigoProduto">
             <option value="" disabled selected>Selecione um produto real do estoque...</option>
+            <!-- O [value]="prod.codigo" garante que o Angular envie apenas o código (ex: AZ-001) para o C# -->
             <option *ngFor="let prod of produtosDisponiveis" [value]="prod.codigo">
               {{ prod.descricao }} (Código: {{ prod.codigo }} | Saldo Atual: {{ prod.saldo }})
             </option>

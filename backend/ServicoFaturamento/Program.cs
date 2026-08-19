@@ -60,8 +60,11 @@ app.MapPut("/api/notas/{id}/imprimir", async (int id, FaturamentoDbContext db,IH
 
         foreach(var item in nota.Itens)
         {
-            var urlEstoque= $"http://localhost:5100/api/produtos/atualizar-saldo?codigo={item.CodigoProduto}&quantidade=8";
+            System.Console.WriteLine($"Tentando baixar o estoque. Produto {item.CodigoProduto}");
+            var urlEstoque= $"http://localhost:5100/api/produtos/atualizar-saldo?codigo={item.CodigoProduto}&quantidadeSubtrair={item.Quantidade}";
             var respostaEstoque=await clientHttp.PutAsync(urlEstoque, null);
+
+            System.Console.WriteLine($"Resposta do Estoque: {respostaEstoque.StatusCode}");
 
             if (!respostaEstoque.IsSuccessStatusCode)
             {

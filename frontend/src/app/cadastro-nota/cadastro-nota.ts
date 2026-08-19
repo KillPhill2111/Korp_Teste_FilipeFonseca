@@ -43,14 +43,19 @@ export class CadastroNota {
   }
 
   ngOnInit(){
-    this.carregarProdutosEstoque();
+    this.carregarProdutosDoEstoque();
     this.carregarNotasDoFaturamento();
     this.adicionarProduto();
   }
-  carregarProdutosEstoque(){
-    this.http.get<any[]>('http://localhost:5100/api/produtos').subscribe({
-      next:(dados)=>this.produtosDisponiveis=dados,
-      error:(erro)=>console.error('Erro ao buscar produtos: ', erro)
+  carregarProdutosDoEstoque(){
+      this.http.get<any[]>('http://localhost:5100/api/produtos').subscribe({
+      next: (dados) => {
+        this.produtosDisponiveis = dados;
+        console.log('Produtos atualizados carregados do estoque:', dados);
+      },
+      error: (erro) => {
+        console.error('Erro ao buscar produtos do microsserviço de estoque:', erro);
+      }
     });
   }
   carregarNotasDoFaturamento(){
@@ -89,6 +94,8 @@ export class CadastroNota {
           this.listaProdutos.clear();
           this.adicionarProduto();
           this.carregarNotasDoFaturamento(); 
+          this.carregarProdutosDoEstoque(); 
+        this.carregarNotasDoFaturamento();
         },
         error: (erro) => {
           console.error(erro);
@@ -115,7 +122,7 @@ export class CadastroNota {
         this.notaSendoProcessada = null;
         
         
-        this.carregarProdutosEstoque();
+        this.carregarProdutosDoEstoque();
         this.carregarNotasDoFaturamento();
       },
       error: (respostaErro) => {

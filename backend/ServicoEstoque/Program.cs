@@ -40,13 +40,17 @@ app.MapPost("/api/produtos",async(Produto produto, EstoqueDbContext db) =>
     return Results.Created($"/api/produtos/{produto.Id}",produto);
 });
 
-app.MapPut("/api/produtos/atualizar-saldo",async (string codigo, int quantidade, EstoqueDbContext db) =>
+app.MapPut("/api/produtos/atualizar-saldo",async (string codigo, int quantidadeSubtrair, EstoqueDbContext db) =>
 {
     var produto=await db.Produtos.FirstOrDefaultAsync(p=>p.Codigo==codigo);
 
     if(produto==null) return Results.NotFound("Produto não encontrado");
 
-    produto.Saldo=quantidade;
+    if (produto.Saldo < quantidadeSubtrair)
+    {
+        return Results.BadRequest("Saldo em estoque insuficiente para relaizar a transação!");
+    }
+    produto.Saldo-=quantidadeSubtrair;
     await db.SaveChangesAsync();
     return Results.Ok(produto);
 });
